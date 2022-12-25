@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,52 +19,61 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import dev.zaenur.jetpokemon.di.Injection
 import dev.zaenur.jetpokemon.model.Pokemon
+import dev.zaenur.jetpokemon.ui.ViewModelFactory
+import dev.zaenur.jetpokemon.ui.common.UiState
 import dev.zaenur.jetpokemon.ui.theme.JetPokemonTheme
 
 
 @Composable
 fun DetailScreen(
     pokemonId: Int,
-    modifier: Modifier = Modifier
+    viewModel: DetailScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        factory = ViewModelFactory(
+            Injection.provideRepository()
+        )
+    ),
 ) {
-    val pokemon = Pokemon(
-        1,
-        "Bulbasaur",
-        "Seed Pokémon",
-        "0.7 m",
-        "6.9 kg",
-        "https://raw.githubusercontent.com/Purukitto/pokemon-data.json/master/images/pokedex/hires/001.png",
-        "https://raw.githubusercontent.com/Purukitto/pokemon-data.json/master/images/pokedex/thumbnails/001.png",
-        "Bulbasaur can be seen napping in bright sunlight. There is a seed on its back. By soaking up the sun’s rays, the seed grows progressively larger.",
-        "#68a891"
-    )
-    Column {
-        TopAppBar(
-            elevation = 4.dp,
-            title = {
-                Text(
-                    stringResource(id = dev.zaenur.jetpokemon.R.string.app_name),
-                    color = Color.White,
-                )
-            },
-            backgroundColor = Color(android.graphics.Color.parseColor(pokemon.color)),
-            actions = {
-                IconButton(onClick = {
+    viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
+        when (uiState) {
+            is UiState.Loading -> {
+                viewModel.getPokemonById(pokemonId)
+            }
+            is UiState.Success -> {
+                val data = uiState.data
+                Column {
+                    TopAppBar(
+                        elevation = 4.dp,
+                        title = {
+                            Text(
+                                stringResource(id = dev.zaenur.jetpokemon.R.string.app_name),
+                                color = Color.White,
+                            )
+                        },
+                        backgroundColor = Color(android.graphics.Color.parseColor(data.color)),
+                        actions = {
+                            IconButton(onClick = {
 
-                }) {
-                    Text(
-                        text = "#%03d".format(pokemonId),
-                        color = Color.White,
+                            }) {
+                                Text(
+                                    text = "#%03d".format(pokemonId),
+                                    color = Color.White,
+                                )
+                            }
+                        }
+                    )
+
+                    DetailContent(
+                        pokemon = data,
                     )
                 }
             }
-        )
-        DetailContent(
-            pokemon = pokemon,
-            modifier = modifier
-        )
+            is UiState.Error -> {}
+        }
     }
+
+
 }
 
 @Composable
