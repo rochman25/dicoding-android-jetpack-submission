@@ -7,9 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
@@ -26,13 +24,12 @@ import dev.zaenur.jetpokemon.ui.theme.JetPokemonTheme
 fun AboutScreen(
     modifier: Modifier = Modifier
 ) {
-    AboutContent(modifier)
-//    Box(
-//        modifier = modifier.fillMaxSize(),
-//        contentAlignment = Alignment.Center,
-//    ) {
-//        Text(stringResource(R.string.about_screen))
-//    }
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        AboutContent(modifier)
+    }
 }
 
 @Composable
@@ -55,7 +52,6 @@ fun AboutContent(
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .padding(
-                    top = 16.dp,
                     bottom = 16.dp,
                 )
                 .size(200.dp)
