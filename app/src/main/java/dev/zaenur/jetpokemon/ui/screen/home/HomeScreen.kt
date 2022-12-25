@@ -13,6 +13,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,12 +25,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import dev.zaenur.jetpokemon.model.PokemonData
+import dev.zaenur.jetpokemon.di.Injection
+import dev.zaenur.jetpokemon.model.Pokemon
+import dev.zaenur.jetpokemon.ui.ViewModelFactory
+import dev.zaenur.jetpokemon.ui.common.UiState
 
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        factory = ViewModelFactory(Injection.provideRepository())
+    ),
     navigateToDetail: (Int) -> Unit,
 ) {
     Column {
@@ -47,30 +54,43 @@ fun HomeScreen(
                 }
             }
         )
-
-        HomeContent(
-            modifier = modifier,
-            navigateToDetail = navigateToDetail
-        )
+        viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uistate ->
+            when(uistate) {
+                is UiState.Loading -> {
+                    viewModel.getAllPokemon()
+                }
+                is UiState.Success -> {
+                    HomeContent(
+                        pokemonData = uistate.data,
+                        modifier = modifier,
+                        navigateToDetail = navigateToDetail
+                    )
+                }
+                is UiState.Error -> {}
+            }
+        }
     }
 }
 
 @Composable
 fun HomeContent(
+    pokemonData: List<Pokemon>,
     modifier : Modifier = Modifier,
     navigateToDetail: (Int) -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(144.dp),
         content = {
-            items(PokemonData.pokemon, key = { it.id }) { pokemon ->
+            items(pokemonData) { data ->
                 PokemonListItem(
-                    name = pokemon.name,
-                    thumbnail = pokemon.thumbnail,
-                    color = pokemon.color,
-                    modifier = modifier.fillMaxWidth().clickable {
-                        navigateToDetail(pokemon.id)
-                    }
+                    name = data.name,
+                    thumbnail = data.thumbnail,
+                    color = data.color,
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            navigateToDetail(data.id)
+                        }
                 )
             }
         },
