@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import dev.zaenur.jetpokemon.data.PokemonData
+import dev.zaenur.jetpokemon.model.PokemonData
 import dev.zaenur.jetpokemon.ui.theme.JetPokemonTheme
 
 @Composable
