@@ -1,36 +1,51 @@
 package dev.zaenur.jetpokemon
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import dev.zaenur.jetpokemon.ui.screen.home.HomeContent
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import dev.zaenur.jetpokemon.ui.navigation.Screen
+import dev.zaenur.jetpokemon.ui.screen.about.AboutScreen
+import dev.zaenur.jetpokemon.ui.screen.detail.DetailScreen
+import dev.zaenur.jetpokemon.ui.screen.home.HomeScreen
 import dev.zaenur.jetpokemon.ui.theme.JetPokemonTheme
 
 @Composable
 fun JetPokemonApp(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController()
 ) {
-    Column {
-        TopAppBar(
-            elevation = 4.dp,
-            title = {
-                Text(stringResource(id = R.string.app_name))
-            },
-            backgroundColor = MaterialTheme.colors.primarySurface,
-            actions = {
-                IconButton(onClick = {/* Do Something*/ }) {
-                    Icon(Icons.Filled.Person, null)
+    NavHost(
+        navController = navController,
+        startDestination = Screen.Home.route,
+    ) {
+        composable(Screen.Home.route) {
+            HomeScreen(
+                modifier = modifier,
+                navigateToDetail = { pokemonId ->
+                    navController.navigate(Screen.DetailPokemon.createRoute(pokemonId))
                 }
-            })
-
-        HomeContent(modifier)
+            )
+        }
+        composable(Screen.About.route) {
+            AboutScreen()
+        }
+        composable(
+            route = Screen.DetailPokemon.route,
+            arguments = listOf(navArgument("pokemonId"){type = NavType.IntType}),
+        ){
+            val id = it.arguments?.getInt("pokemonId") ?: 0
+            DetailScreen(
+                pokemonId = id
+            )
+        }
     }
+
 
 }
 
