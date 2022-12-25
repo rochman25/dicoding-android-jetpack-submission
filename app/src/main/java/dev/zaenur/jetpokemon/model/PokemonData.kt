@@ -1,7 +1,5 @@
 package dev.zaenur.jetpokemon.model
 
-import dev.zaenur.jetpokemon.data.Pokemon
-
 object PokemonData {
     val pokemon = listOf(
         Pokemon(

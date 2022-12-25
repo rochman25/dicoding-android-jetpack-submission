@@ -1,4 +1,4 @@
-package dev.zaenur.jetpokemon.data
+package dev.zaenur.jetpokemon.model
 
 data class Pokemon(
     val id: Int,
