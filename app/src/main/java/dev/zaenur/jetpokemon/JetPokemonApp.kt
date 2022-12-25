@@ -8,8 +8,12 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Card
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
@@ -17,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,19 +35,34 @@ import dev.zaenur.jetpokemon.ui.theme.JetPokemonTheme
 fun JetPokemonApp(
     modifier: Modifier = Modifier
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(144.dp),
-        content = {
-            items(PokemonData.pokemon, key = { it.id }) { pokemon ->
-                PokemonListItem(
-                    name = pokemon.name,
-                    thumbnail = pokemon.thumbnail,
-                    color = pokemon.color,
-                    modifier = modifier.fillMaxWidth()
-                )
+    Column {
+        TopAppBar(
+            elevation = 4.dp,
+            title = {
+                Text(stringResource(id = R.string.app_name))
+            },
+            backgroundColor = MaterialTheme.colors.primarySurface,
+            actions = {
+                IconButton(onClick = {/* Do Something*/ }) {
+                    Icon(Icons.Filled.Person, null)
+                }
+            })
+
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(144.dp),
+            content = {
+                items(PokemonData.pokemon, key = { it.id }) { pokemon ->
+                    PokemonListItem(
+                        name = pokemon.name,
+                        thumbnail = pokemon.thumbnail,
+                        color = pokemon.color,
+                        modifier = modifier.fillMaxWidth()
+                    )
+                }
             }
-        }
-    )
+        )
+    }
+
 }
 
 @Composable
