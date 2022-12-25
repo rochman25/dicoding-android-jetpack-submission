@@ -29,7 +29,8 @@ fun JetPokemonApp(
                 modifier = modifier,
                 navigateToDetail = { pokemonId ->
                     navController.navigate(Screen.DetailPokemon.createRoute(pokemonId))
-                }
+                },
+                navController = navController,
             )
         }
         composable(Screen.About.route) {

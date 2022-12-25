@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
@@ -16,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -24,11 +22,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import dev.zaenur.jetpokemon.di.Injection
 import dev.zaenur.jetpokemon.model.Pokemon
 import dev.zaenur.jetpokemon.ui.ViewModelFactory
 import dev.zaenur.jetpokemon.ui.common.UiState
+import dev.zaenur.jetpokemon.ui.navigation.Screen
 
 
 @Composable
@@ -38,6 +39,7 @@ fun HomeScreen(
         factory = ViewModelFactory(Injection.provideRepository())
     ),
     navigateToDetail: (Int) -> Unit,
+    navController: NavController = rememberNavController(),
 ) {
     Column {
         TopAppBar(
@@ -48,7 +50,7 @@ fun HomeScreen(
             backgroundColor = MaterialTheme.colors.primarySurface,
             actions = {
                 IconButton(onClick = {
-
+                    navController.navigate(Screen.About.route)
                 }) {
                     Icon(Icons.Filled.Person, null)
                 }
@@ -125,7 +127,6 @@ fun PokemonListItem(
                 modifier = Modifier
                     .padding(8.dp)
                     .size(96.dp)
-                    .clip(CircleShape)
             )
             Text(
                 text = name,
