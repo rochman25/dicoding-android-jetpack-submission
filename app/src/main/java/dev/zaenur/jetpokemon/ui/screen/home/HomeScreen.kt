@@ -45,7 +45,8 @@ fun HomeScreen(
                 }) {
                     Icon(Icons.Filled.Person, null)
                 }
-            })
+            }
+        )
 
         HomeContent(
             modifier = modifier,
@@ -103,7 +104,7 @@ fun PokemonListItem(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .padding(8.dp)
-                    .size(60.dp)
+                    .size(96.dp)
                     .clip(CircleShape)
             )
             Text(
