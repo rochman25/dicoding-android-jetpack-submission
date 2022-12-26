@@ -49,10 +49,11 @@ fun HomeScreen(
             },
             backgroundColor = MaterialTheme.colors.primarySurface,
             actions = {
-                IconButton(onClick = {
+                IconButton(
+                    onClick = {
                     navController.navigate(Screen.About.route)
                 }) {
-                    Icon(Icons.Filled.Person, null)
+                    Icon(Icons.Filled.Person, "about_page")
                 }
             }
         )
